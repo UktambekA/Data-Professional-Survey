@@ -275,18 +275,9 @@ with tabs[0]:
     # Ustunlar tanlash
     numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns.tolist()
     if numeric_cols:
-        # Statistik ma'lumotlarni ko'rsatish
-        stat_df = df[numeric_cols].describe()
-        # Qiymatlarni formatlash
-        formatted_stats = stat_df.copy()
-        # Maosh ustunini formatlash
-        if 'Salary' in stat_df.columns:
-            for idx in stat_df.index:
-                formatted_stats.loc[idx, 'Salary'] = f"${int(stat_df.loc[idx, 'Salary']):,}"
-        
-        st.dataframe(formatted_stats)
+        st.dataframe(df[numeric_cols].describe())
     else:
-        st.info("Raqamli ma'lumotlar mavjud emas. Ustunlarni tekshirib ko'ring:")
+        st.info("Raqamli ma'lumotlar mavjud emas")
     
     # Yozma tahlil natijasi
     st.subheader("Asosiy xulosalar")
@@ -357,7 +348,7 @@ with tabs[1]:
             gender_counts.columns = ['Gender', 'Count']
             
             fig = px.bar(gender_counts, x='Gender', y='Count', 
-                        color='Gender', title='Jinsi bo'yicha taqsimot')
+                        color='Gender', title="Jinsi bo'yicha taqsimot")
             fig.update_layout(height=350)
             st.plotly_chart(fig, use_container_width=True)
         else:
@@ -368,7 +359,7 @@ with tabs[1]:
             st.subheader("Yosh bo'yicha taqsimot")
             
             fig = px.histogram(df, x='Age', nbins=20, 
-                            title='Yosh bo'yicha taqsimot',
+                            title="Yosh bo'yicha taqsimot",
                             color_discrete_sequence=['#3366CC'])
             fig.update_layout(height=350)
             st.plotly_chart(fig, use_container_width=True)
@@ -429,9 +420,9 @@ with tabs[2]:
                 role_salary = df.groupby('Role')['Salary'].mean().sort_values(ascending=False).reset_index()
                 
                 fig = px.bar(role_salary, x='Role', y='Salary', 
-                            title='Lavozimlar bo'yicha o'rtacha maosh',
+                            title="Lavozimlar bo'yicha o'rtacha maosh",
                             color='Salary', color_continuous_scale='Viridis')
-                fig.update_layout(yaxis_title='O'rtacha maosh ($)', height=400)
+                fig.update_layout(yaxis_title="O'rtacha maosh ($)", height=400)
                 st.plotly_chart(fig, use_container_width=True)
             else:
                 st.info("Lavozimlar haqida ma'lumot mavjud emas")
@@ -444,7 +435,7 @@ with tabs[2]:
             st.subheader("Maosh va tajriba o'rtasidagi bog'liqlik")
             
             fig = px.scatter(df, x='YearsExperience', y='Salary', 
-                            title='Maosh va tajriba o'rtasidagi bog'liqlik',
+                            title="Maosh va tajriba o'rtasidagi bog'liqlik",
                             color='Salary', size='Salary',
                             color_continuous_scale='Viridis')
             
